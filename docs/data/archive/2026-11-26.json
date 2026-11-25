@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-26",
+  "generated_at": "2026-11-26T06:00:00+08:00",
+  "categories": [
+    {
+      "id": "battery",
+      "name": "电池与储能学术"
+    },
+    {
+      "id": "ai",
+      "name": "AI 前沿"
+    },
+    {
+      "id": "science",
+      "name": "科学发现与 AI4S"
+    },
+    {
+      "id": "education",
+      "name": "教育教学"
+    },
+    {
+      "id": "industry",
+      "name": "储能产业"
+    }
+  ],
+  "stats": {
+    "fetched": 2,
+    "processed": 2,
+    "high_value": 2
+  },
+  "items": [
+    {
+      "id": "demo-battery-01",
+      "title_zh": "【示例数据】融合电化学热力学约束的锂电池热失控早期预警方法",
+      "title_orig": "[Demo] Physics-Informed Neural Networks for Early Thermal Runaway Warning in Lithium-Ion Batteries",
+      "source": "Nature Energy (示例)",
+      "category": "battery",
+      "url": "https://www.nature.com/nenergy/",
+      "published_at": "2026-11-26",
+      "score": 4.8,
+      "tags": [
+        "热失控预警",
+        "PINN",
+        "示例数据"
+      ],
+      "tldr": {
+        "problem": "传统纯数据驱动模型在极端工况与少样本下热失控误报率高。",
+        "method": "将电化学产热-散热微分方程嵌入神经网络损失函数，约束外推边界。",
+        "takeaway": "平均提前 15 分钟发出预警，误报率降低 62%（运行首次 Action 后将替换为真实每日情报）。"
+      },
+      "conditions_and_metrics": "- 体系与工况：NCM811 软包电芯，25°C~60°C 过充与内短路工况\n- 关键指标：平均预警提前量 15.2 min，AUC 0.984，跨倍率泛化误差 < 3.1%",
+      "deep_dive": "这是一条内置示例卡片，用于在你刚刚开启 GitHub Pages、尚未运行第一次定时抓取时验证网页排版与 Obsidian 一键导入功能。\n\n1. 背景与痛点：高比能锂离子电池在储能电站和电动汽车中的热失控演化极快，传统基于阈值或纯数据驱动的深度学习模型高度依赖故障样本覆盖度，在未见工况下容易出现漏报或高频误报。\n\n2. 核心方法：作者构建了物理信息神经网络（PINN）架构，将电芯内部的产热动力学方程与热传导偏微分方程以软约束形式写入损失函数，同时结合电压松弛特征与温升速率二阶导数作为输入特征。\n\n3. 关键结果：在台架滥用测试与实车脱敏运行数据上验证，相比纯 LSTM 和 Transformer 基线，模型在仅使用 20% 故障样本训练时即可实现平均提前 15 分钟预警。\n\n4. 局限性：物理参数随电池全生命周期老化会发生漂移，论文尚未完整验证服役 5 年以上深度老化电芯的长期在线自适应能力。",
+      "inspiration": "请点击下方按钮测试“一键写入 Obsidian”（默认写入 Knowledge 仓库的 01_Research/Inbox 目录）。确认导入顺畅后，去 GitHub 仓库的 Actions 页面手动触发一次 Daily Brief Pipeline，即可替换为当日真实论文与资讯！"
+    },
+    {
+      "id": "demo-edu-01",
+      "title_zh": "【示例数据】生成式 AI 时代的工程设计课程：从标准答案转向人机协同评价",
+      "title_orig": "[Demo] Redesigning Engineering Design Courses for Human-AI Collaboration",
+      "source": "One Useful Thing (示例)",
+      "category": "education",
+      "url": "https://www.oneusefulthing.org/",
+      "published_at": "2026-11-26",
+      "score": 4.3,
+      "tags": [
+        "AI教学改革",
+        "工程教育",
+        "示例数据"
+      ],
+      "tldr": {
+        "problem": "传统课后作业与课程设计报告容易被大模型直接代写，原有考核方式失效。",
+        "method": "将课程拆解为分级复杂工程任务，要求学生提交“与 AI 迭代对话日志 + 批判性核验清单”。",
+        "takeaway": "学生对工程边界条件与安全规范的辨析能力显著提升。"
+      },
+      "conditions_and_metrics": "- 适用场景：高校工科高年级综合设计类课程\n- 核心评价维度：任务拆解深度、AI 幻觉纠错率、工程规范符合度",
+      "deep_dive": "这是一条教育教学板块的示例数据。当你的 GitHub Actions 首次运行成功后，这里将自动填充来自 Ethan Mollick、Inside Higher Ed 和 EDUCAUSE Review 的真实前沿文章拆解。\n\n核心观点在于：禁止学生使用 AI 既不现实也不利于培养未来工程师，更有效的教学改革是将评价重心从“最终静态报告”前移到“过程性人机协同决策”，重点考察学生如何设定工程约束、如何识别模型在物性计算或规范引用中的隐蔽错误。",
+      "inspiration": "可直接作为工科综合设计课程人机协同评价量规的设计参考，点击下方可测试写入 Obsidian。"
+    }
+  ]
+}

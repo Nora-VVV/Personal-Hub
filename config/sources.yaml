@@ -1,0 +1,205 @@
+# Personal Hub 信息源配置文件
+# 后期增删信息源，直接在 GitHub 网页版点击右上角铅笔图标修改并保存即可
+
+categories:
+  - id: battery
+    name: 电池与储能学术
+  - id: ai
+    name: AI 前沿
+  - id: science
+    name: 科学发现与 AI4S
+  - id: education
+    name: 教育教学
+  - id: industry
+    name: 储能产业
+
+# ---------------------------------------------------------
+# 1. OpenAlex 学术顶刊精准监控流（免 API Key，自带摘要与 DOI）
+# ---------------------------------------------------------
+openalex_streams:
+  - name: 电池与电容预测预警顶刊流
+    category: battery
+    lookback_days: 14
+    max_items: 12
+    # OpenAlex 粗筛搜索词
+    search_query: "battery OR supercapacitor OR capacitor OR BESS"
+    # 本地精准正则过滤：必须同时命中 主题词(must_match_a) 和 方法/预警词(must_match_b)
+    must_match_a:
+      - battery
+      - batteries
+      - supercapacitor
+      - capacitor
+      - bess
+      - lithium-ion
+      - sodium-ion
+      - solid-state
+    must_match_b:
+      - prediction
+      - predict
+      - prognosis
+      - prognostic
+      - early warning
+      - thermal runaway
+      - soh
+      - rul
+      - state of health
+      - state of charge
+      - fault diagnosis
+      - degradation
+      - aging
+      - ageing
+      - safety
+    journals:
+      - Nature
+      - Science
+      - Nature Energy
+      - Nature Chemical Engineering
+      - Nature Computational Science
+      - Nature Communications
+      - Scientific Reports
+      - Science Advances
+      - Cell
+      - Joule
+      - Cell Reports Physical Science
+      - IEEE Transactions on Transportation Electrification
+      - IEEE Transactions on Industrial Electronics
+      - IEEE Transactions on Vehicular Technology
+      - IEEE Transactions on Power Electronics
+      - Applied Energy
+      - Energy
+      - Energy Storage Materials
+
+  - name: AI for Science 科研范式顶刊流
+    category: science
+    lookback_days: 14
+    max_items: 5
+    search_query: '"AI for Science" OR "scientific discovery" OR "autonomous laboratory" OR "foundation model"'
+    must_match_a:
+      - ai for science
+      - scientific discovery
+      - autonomous laboratory
+      - self-driving lab
+      - machine learning
+      - foundation model
+      - artificial intelligence
+    must_match_b:
+      - scientific
+      - discovery
+      - paradigm
+      - hypothesis
+      - laboratory
+      - chemistry
+      - materials
+      - physics
+    journals:
+      - Nature
+      - Science
+      - Nature Machine Intelligence
+      - Nature Computational Science
+
+# ---------------------------------------------------------
+# 2. Hugging Face 每日热门论文（官方 JSON 接口）
+# ---------------------------------------------------------
+hf_daily_papers:
+  enabled: true
+  category: ai
+  max_items: 6
+
+# ---------------------------------------------------------
+# 3. 标准 RSS / Atom 订阅源
+# ---------------------------------------------------------
+rss_sources:
+  # --- AI 前沿 ---
+  - name: arXiv cs.LG (算法与时序精选)
+    url: https://rss.arxiv.org/rss/cs.LG
+    category: ai
+    max_items: 6
+    # 仅保留包含以下关键词的论文，避免刷屏
+    keywords:
+      - time series
+      - physics-informed
+      - pinn
+      - uncertainty
+      - anomaly detection
+      - foundation model
+      - state space
+      - forecasting
+      - degradation
+      - fault
+
+  - name: Ahead of AI (Sebastian Raschka)
+    url: https://magazine.sebastianraschka.com/feed
+    category: ai
+    max_items: 3
+
+  - name: Google DeepMind Blog
+    url: https://deepmind.google/blog/rss.xml
+    category: ai
+    max_items: 3
+
+  # --- 科学发现 ---
+  - name: Nature News
+    url: https://www.nature.com/nature.rss
+    category: science
+    max_items: 4
+
+  - name: Science News
+    url: https://www.science.org/rss/news_current.xml
+    category: science
+    max_items: 4
+
+  - name: Quanta Magazine
+    url: https://api.quantamagazine.org/feed/
+    category: science
+    max_items: 3
+
+  # --- 教育教学 ---
+  - name: One Useful Thing (Ethan Mollick)
+    url: https://www.oneusefulthing.org/feed
+    category: education
+    max_items: 3
+
+  - name: Inside Higher Ed
+    url: https://www.insidehighered.com/rss.xml
+    category: education
+    max_items: 4
+    keywords:
+      - ai
+      - artificial intelligence
+      - teaching
+      - learning
+      - curriculum
+      - assessment
+      - pedagogy
+      - engineering
+      - student
+
+  - name: EDUCAUSE Review
+    url: https://er.educause.edu/rss
+    category: education
+    max_items: 3
+
+  # --- 储能产业 ---
+  - name: Energy-Storage.News
+    url: https://www.energy-storage.news/feed/
+    category: industry
+    max_items: 5
+
+  - name: Canary Media
+    url: https://www.canarymedia.com/rss.rss
+    category: industry
+    max_items: 4
+    keywords:
+      - battery
+      - storage
+      - grid
+      - bess
+      - lithium
+      - thermal
+      - safety
+      - ldes
+
+  - name: IEA News
+    url: https://www.iea.org/rss/news.xml
+    category: industry
+    max_items: 3

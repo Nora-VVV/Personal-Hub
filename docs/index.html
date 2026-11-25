@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Hub · 每日科研与前沿情报看板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .card-active {
+      box-shadow: 0 0 0 2px #2563eb;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- 顶部导航栏 -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">PH</div>
+        <div>
+          <h1 class="font-semibold text-slate-900 text-base leading-tight">Personal Hub</h1>
+          <p id="generatedAtText" class="text-xs text-slate-500">加载中...</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- 历史日期切换 -->
+        <select id="dateSelect" class="text-sm border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="latest">最新一期</option>
+        </select>
+
+        <!-- Obsidian 设置按钮 -->
+        <button id="openSettingsBtn" class="text-sm px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 transition">
+          <span>⚙️</span>
+          <span class="hidden sm:inline">Obsidian 设置</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 筛选与统计条 -->
+  <section class="bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 space-y-3">
+      <!-- 领域 Tab -->
+      <div id="categoryTabs" class="flex flex-wrap items-center gap-2"></div>
+
+      <!-- 二级过滤条 -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <div class="flex flex-wrap items-center gap-2 text-sm">
+          <span class="text-slate-500 text-xs">评分筛选：</span>
+          <button data-score="0" class="score-btn px-2.5 py-1 rounded-md text-xs font-medium bg-slate-900 text-white">全部</button>
+          <button data-score="3.5" class="score-btn px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">≥ 3.5 推荐</button>
+          <button data-score="4.0" class="score-btn px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">≥ 4.0 精选</button>
+
+          <label class="inline-flex items-center gap-1.5 ml-2 text-xs text-slate-600 cursor-pointer select-none">
+            <input id="hideReadToggle" type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
+            隐藏已读
+          </label>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <input id="searchInput" type="text" placeholder="搜索标题、标签、关键词..." class="w-full sm:w-56 text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <span id="statsBadge" class="text-xs text-slate-500 whitespace-nowrap"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主内容卡片区 -->
+  <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 flex-1">
+    <div id="cardList" class="grid grid-cols-1 gap-4"></div>
+    <div id="emptyState" class="hidden text-center py-16 text-slate-400">
+      <p class="text-base">当前筛选条件下没有内容</p>
+      <p class="text-xs mt-1">试试切换领域、放宽评分筛选或取消“隐藏已读”</p>
+    </div>
+  </main>
+
+  <!-- 页脚快捷键提示 -->
+  <footer class="border-t border-slate-200 bg-white py-3 text-center text-xs text-slate-400">
+    快捷键：<kbd class="px-1.5 py-0.5 bg-slate-100 rounded text-slate-600">J</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-100 rounded text-slate-600">K</kbd> 切换卡片 ·
+    <kbd class="px-1.5 py-0.5 bg-slate-100 rounded text-slate-600">Enter</kbd> 展开精读抽屉 ·
+    <kbd class="px-1.5 py-0.5 bg-slate-100 rounded text-slate-600">R</kbd> 标记已读 ·
+    <kbd class="px-1.5 py-0.5 bg-slate-100 rounded text-slate-600">Esc</kbd> 关闭弹窗
+  </footer>
+
+  <!-- 右侧精读与沉淀抽屉 -->
+  <div id="drawerOverlay" class="fixed inset-0 bg-slate-900/35 z-40 hidden transition-opacity"></div>
+  <aside id="detailDrawer" class="fixed top-0 right-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-200 flex flex-col">
+    <!-- 抽屉顶部 -->
+    <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between gap-4 bg-slate-50">
+      <div class="flex items-center gap-2 min-w-0">
+        <span id="drawerScore" class="px-2.5 py-0.5 rounded-full text-xs font-semibold"></span>
+        <span id="drawerSource" class="text-xs text-slate-600 truncate"></span>
+        <span id="drawerDate" class="text-xs text-slate-400"></span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <a id="drawerOrigLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-medium">
+          打开原文 ↗
+        </a>
+        <button id="closeDrawerBtn" class="p-1.5 rounded-lg hover:bg-slate-200 text-slate-500">✕</button>
+      </div>
+    </div>
+
+    <!-- 抽屉滚动正文 -->
+    <div id="drawerBody" class="flex-1 overflow-y-auto px-6 py-5 space-y-6">
+      <div>
+        <h2 id="drawerTitleZh" class="text-xl font-bold text-slate-900 leading-snug"></h2>
+        <p id="drawerTitleOrig" class="text-xs text-slate-500 mt-1.5 leading-relaxed"></p>
+        <div id="drawerTags" class="flex flex-wrap gap-1.5 mt-3"></div>
+      </div>
+
+      <!-- 三行速览 -->
+      <div class="bg-blue-50/70 border border-blue-100 rounded-xl p-4 space-y-2 text-sm">
+        <h3 class="font-semibold text-blue-900 text-xs uppercase tracking-wider">📌 三行速览（TL;DR）</h3>
+        <p><span class="font-medium text-slate-800">核心问题：</span><span id="drawerProblem" class="text-slate-700"></span></p>
+        <p><span class="font-medium text-slate-800">核心方法：</span><span id="drawerMethod" class="text-slate-700"></span></p>
+        <p><span class="font-medium text-slate-800">关键结论：</span><span id="drawerTakeaway" class="text-slate-700"></span></p>
+      </div>
+
+      <!-- 核心工况与量化指标 -->
+      <div id="drawerMetricsBox" class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <h3 class="font-semibold text-slate-800 text-xs uppercase tracking-wider mb-2">📊 核心工况与量化指标</h3>
+        <div id="drawerMetrics" class="text-sm text-slate-700 whitespace-pre-line leading-relaxed"></div>
+      </div>
+
+      <!-- 深度拆解（600-1200字） -->
+      <div>
+        <h3 class="font-semibold text-slate-900 text-sm mb-2">🔍 作者方法与结论拆解</h3>
+        <div id="drawerDeepDive" class="text-sm text-slate-700 whitespace-pre-line leading-7 space-y-3"></div>
+      </div>
+
+      <!-- 跨界与工程启发 -->
+      <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-4">
+        <h3 class="font-semibold text-amber-900 text-xs uppercase tracking-wider mb-1.5">🔗 跨界与工程启发</h3>
+        <p id="drawerInspiration" class="text-sm text-amber-950 leading-relaxed"></p>
+      </div>
+
+      <!-- L2 沉淀到 Obsidian 表单 -->
+      <div class="border-t border-slate-200 pt-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-slate-900 text-sm">💡 沉淀到 Obsidian（L2 轻量线索卡）</h3>
+          <span id="obsidianPathHint" class="text-xs text-slate-400"></span>
+        </div>
+
+        <div class="flex flex-wrap gap-2 text-xs">
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 cursor-pointer hover:bg-slate-50">
+            <input type="checkbox" value="科研" class="purpose-cb rounded text-blue-600" checked /> 科研
+          </label>
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 cursor-pointer hover:bg-slate-50">
+            <input type="checkbox" value="教学案例" class="purpose-cb rounded text-blue-600" /> 教学案例
+          </label>
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 cursor-pointer hover:bg-slate-50">
+            <input type="checkbox" value="写作素材" class="purpose-cb rounded text-blue-600" /> 写作素材
+          </label>
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 cursor-pointer hover:bg-slate-50">
+            <input type="checkbox" value="待精读PDF" class="purpose-cb rounded text-blue-600" /> 待精读 PDF
+          </label>
+        </div>
+
+        <textarea id="personalNoteInput" rows="3" placeholder="写下你的即时解读、批判或待验证假设（留空也可直接导入，笔记置顶留白）..." class="w-full text-sm border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+
+        <div class="flex flex-wrap items-center gap-2.5 pt-1">
+          <button id="sendObsidianBtn" class="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium transition">
+            ⚡ 一键写入 Obsidian
+          </button>
+          <button id="copyMarkdownBtn" class="px-3.5 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-medium transition">
+            📋 复制 Markdown
+          </button>
+          <button id="downloadMdBtn" class="px-3.5 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-medium transition">
+            ⬇️ 下载 .md
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Obsidian 设置弹窗 -->
+  <div id="settingsModal" class="fixed inset-0 bg-slate-900/40 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-semibold text-slate-900 text-base">⚙️ Obsidian 导入设置</h3>
+        <button id="closeSettingsBtn" class="text-slate-400 hover:text-slate-600">✕</button>
+      </div>
+      <p class="text-xs text-slate-500">设置仅保存在你当前浏览器的本地存储中，不会上传到网络。</p>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Obsidian 仓库名称（Vault Name）</label>
+          <input id="vaultNameInput" type="text" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="例如：Knowledge" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">默认保存目录（相对路径）</label>
+          <input id="folderPathInput" type="text" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="例如：01_Research/Inbox" />
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button id="cancelSettingsBtn" class="px-3.5 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100">取消</button>
+        <button id="saveSettingsBtn" class="px-4 py-2 rounded-lg text-sm bg-slate-900 text-white hover:bg-slate-800">保存设置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 轻提示 Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-sm px-4 py-2 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-200"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -82,6 +82,8 @@ def process_single_item(
                 "source": item["source"],
                 "category": item["category"],
                 "url": item["url"],
+                "doi": item.get("doi", ""),
+                "authors": item.get("authors", []),
                 "published_at": item["published_at"],
                 "score": score,
                 "tags": [str(t).strip() for t in tags[:5] if str(t).strip()],

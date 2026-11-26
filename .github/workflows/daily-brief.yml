@@ -26,20 +26,21 @@ jobs:
 
       - name: Validate LLM secrets
         env:
-          LLM_API_KEY:  ${{ secrets.LLM_API_KEY }}
-          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
-          LLM_MODEL:    ${{ secrets.LLM_MODEL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
         run: |
-          [ -n "$LLM_API_KEY" ]  || { echo "::error::LLM_API_KEY empty"; exit 1; }
-          [ -n "$LLM_BASE_URL" ] || { echo "::error::LLM_BASE_URL empty"; exit 1; }
-          [ -n "$LLM_MODEL" ]    || { echo "::error::LLM_MODEL empty"; exit 1; }
-          echo "model=$LLM_MODEL  base=${LLM_BASE_URL%/}"
+          [ -n "$LLM_API_KEY" ] || { echo "::error::LLM_API_KEY secret is empty"; exit 1; }
+          BASE="https://api.deepseek.com/v1"
+          MODEL="deepseek-flash"
+          echo "model=[$MODEL] base=[$BASE] keylen=${#LLM_API_KEY}"
+          resp=$(curl -sS -X POST "$BASE/chat/completions" -H "Content-Type: application/json" -H "Authorization: Bearer $LLM_API_KEY" -d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"max_tokens\":1}" -w "\nHTTPCODE:%{http_code}" 2>&1) || echo "curl_exit=$?"
+          echo "$resp"
+          echo "$resp" | grep -q "HTTPCODE:200" || { echo "::error::DeepSeek rejected the probe request"; exit 1; }
           
       - name: Run fetch and AI processing
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
-          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          LLM_BASE_URL: https://api.deepseek.com/v1
+          LLM_MODEL: deepseek-flash
           MAX_DAILY_ITEMS: "35"
         run: python scripts/main.py
 

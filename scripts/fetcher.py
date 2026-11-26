@@ -22,6 +22,14 @@ def clean_html(raw_text: str) -> str:
     return text
 
 
+def clean_doi(raw_doi: str) -> str:
+    if not raw_doi:
+        return ""
+    doi = str(raw_doi).strip()
+    doi = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", doi, flags=re.IGNORECASE)
+    return doi.strip()
+
+
 def make_item_id(url: str, title: str) -> str:
     key = (url or title).strip().lower()
     return hashlib.md5(key.encode("utf-8")).hexdigest()[:12]
@@ -168,9 +176,16 @@ def fetch_openalex_streams(streams: List[dict], client: httpx.Client) -> List[di
             primary_loc = w.get("primary_location") or {}
             source_info = primary_loc.get("source") or {}
             journal_name = source_info.get("display_name") or name
-            doi = w.get("doi") or ""
-            landing_url = primary_loc.get("landing_page_url") or doi or w.get("id") or ""
+            raw_doi = w.get("doi") or ""
+            doi = clean_doi(raw_doi)
+            landing_url = primary_loc.get("landing_page_url") or raw_doi or w.get("id") or ""
             pub_date = w.get("publication_date") or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+            authors = []
+            for auth in (w.get("authorships") or [])[:12]:
+                author_name = (auth.get("author") or {}).get("display_name") or ""
+                if author_name.strip():
+                    authors.append(author_name.strip())
 
             items.append(
                 {
@@ -180,6 +195,8 @@ def fetch_openalex_streams(streams: List[dict], client: httpx.Client) -> List[di
                     "source": journal_name,
                     "category": category,
                     "url": landing_url,
+                    "doi": doi,
+                    "authors": authors,
                     "published_at": pub_date,
                 }
             )
@@ -210,9 +227,17 @@ def fetch_hf_daily_papers(cfg: dict, client: httpx.Client) -> List[dict]:
             if not title:
                 continue
             url = f"https://huggingface.co/papers/{paper_id}" if paper_id else "https://huggingface.co/papers"
+            doi = f"10.48550/arXiv.{paper_id}" if paper_id else ""
             pub_raw = paper.get("publishedAt") or entry.get("publishedAt") or ""
             pub_date = pub_raw[:10] if len(pub_raw) >= 10 else datetime.now(timezone.utc).strftime("%Y-%m-%d")
             upvotes = paper.get("upvotes", 0)
+
+            authors = []
+            for a in (paper.get("authors") or [])[:12]:
+                a_name = a.get("name") or "" if isinstance(a, dict) else str(a)
+                if a_name.strip():
+                    authors.append(a_name.strip())
+
             items.append(
                 {
                     "id": make_item_id(url, title),
@@ -221,6 +246,8 @@ def fetch_hf_daily_papers(cfg: dict, client: httpx.Client) -> List[dict]:
                     "source": "Hugging Face Daily Papers",
                     "category": category,
                     "url": url,
+                    "doi": doi,
+                    "authors": authors,
                     "published_at": pub_date,
                 }
             )
@@ -240,6 +267,20 @@ def parse_feed_date(entry) -> str:
             except Exception:
                 pass
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+
+def extract_rss_authors(entry) -> List[str]:
+    authors = []
+    if hasattr(entry, "authors") and entry.authors:
+        for a in entry.authors[:12]:
+            name = clean_html(a.get("name", "")) if isinstance(a, dict) else clean_html(str(a))
+            if name:
+                authors.append(name)
+    elif hasattr(entry, "author") and entry.author:
+        raw = clean_html(str(entry.author))
+        if raw:
+            authors = [p.strip() for p in raw.split(",") if p.strip()][:12]
+    return authors
 
 
 def fetch_rss_sources(rss_sources: List[dict], client: httpx.Client) -> List[dict]:
@@ -283,6 +324,11 @@ def fetch_rss_sources(rss_sources: List[dict], client: httpx.Client) -> List[dic
                 if not match_any_keyword(combined, keywords):
                     continue
 
+            doi = ""
+            arxiv_match = re.search(r"arxiv\.org/abs/([0-9]+\.[0-9]+)", link, flags=re.IGNORECASE)
+            if arxiv_match:
+                doi = f"10.48550/arXiv.{arxiv_match.group(1)}"
+
             items.append(
                 {
                     "id": make_item_id(link, title),
@@ -291,6 +337,8 @@ def fetch_rss_sources(rss_sources: List[dict], client: httpx.Client) -> List[dic
                     "source": name,
                     "category": category,
                     "url": link,
+                    "doi": doi,
+                    "authors": extract_rss_authors(entry),
                     "published_at": parse_feed_date(entry),
                 }
             )

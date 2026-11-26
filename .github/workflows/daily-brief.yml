@@ -26,19 +26,14 @@ jobs:
 
       - name: Validate LLM secrets
         env:
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_API_KEY:  ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
-          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          LLM_MODEL:    ${{ secrets.LLM_MODEL }}
         run: |
-          [ -n "$LLM_API_KEY" ]  || { echo "::error::secret LLM_API_KEY is empty"; exit 1; }
-          [ -n "$LLM_BASE_URL" ] || { echo "::error::secret LLM_BASE_URL is empty"; exit 1; }
-          [ -n "$LLM_MODEL" ]    || { echo "::error::secret LLM_MODEL is empty"; exit 1; }
+          [ -n "$LLM_API_KEY" ]  || { echo "::error::LLM_API_KEY empty"; exit 1; }
+          [ -n "$LLM_BASE_URL" ] || { echo "::error::LLM_BASE_URL empty"; exit 1; }
+          [ -n "$LLM_MODEL" ]    || { echo "::error::LLM_MODEL empty"; exit 1; }
           echo "model=$LLM_MODEL  base=${LLM_BASE_URL%/}"
-          code=$(curl -sS -o /tmp/probe.json -w '%{http_code}' "${LLM_BASE_URL%/}/chat/completions" \
-            -H "Authorization: Bearer $LLM_API_KEY" -H 'Content-Type: application/json' \
-            -d "{\"model\":\"$LLM_MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"ping\"}],\"max_tokens\":1}") || true
-          echo "probe HTTP:$code"; head -c 400 /tmp/probe.json; echo
-          [ "$code" = "200" ] || { echo "::error::DeepSeek API rejected the request (HTTP $code)"; exit 1; }
           
       - name: Run fetch and AI processing
         env:

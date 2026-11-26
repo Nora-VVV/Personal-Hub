@@ -61,7 +61,7 @@ def main():
     processed = process_items(new_items, system_prompt, max_workers=4)
     if not processed:
         print("[Pipeline] Warning: AI processing returned 0 items.")
-        return
+        raise SystemExit(1)
 
     for item in processed:
         seen[item["id"]] = today_str

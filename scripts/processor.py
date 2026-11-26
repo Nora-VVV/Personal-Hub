@@ -9,15 +9,16 @@ from openai import OpenAI
 
 
 def build_client() -> tuple[OpenAI, str]:
-    api_key = os.environ.get("LLM_API_KEY" or "").strip()
-    base_url = os.environ.get("LLM_BASE_URL" or "https://api.deepseek.com/v1").strip()
-    model = os.environ.get("LLM_MODEL", "deepseek-flash").strip()
+    api_key = (os.environ.get("LLM_API_KEY") or "").strip()
+    base_url = (os.environ.get("LLM_BASE_URL") or "https://api.deepseek.com/v1").strip().rstrip("/")
+    model = (os.environ.get("LLM_MODEL") or "deepseek-flash").strip()
 
     if not api_key:
         raise RuntimeError(
             "Missing LLM_API_KEY environment variable. Please set it in GitHub Repository Secrets."
         )
 
+    print(f"[AI] endpoint={base_url} model={model} key_len={len(api_key)}")
     client = OpenAI(api_key=api_key, base_url=base_url)
     return client, model
 
@@ -122,7 +123,7 @@ def process_items(items: List[dict], system_prompt: str, max_workers: int = 4) -
     results.sort(key=lambda x: (x.get("score", 0), x.get("published_at", "")), reverse=True)
     if not results:
         raise RuntimeError(
-        f"All {len(items)} AI requests failed. Check secrets LLM_API_KEY / "
-        f"LLM_BASE_URL / LLM_MODEL (current model: {model}, base_url: {base_url}."
+            f"All {len(items)} AI requests failed with model '{model}'. "
+            "Check secrets LLM_API_KEY / LLM_BASE_URL / LLM_MODEL and read the errors above."
         )
     return results

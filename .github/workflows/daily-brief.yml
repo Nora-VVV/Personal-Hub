@@ -50,3 +50,13 @@ jobs:
           git config user.email "bot@users.noreply.github.com"
           git add data/ docs/data/
           git diff --quiet && git diff --staged --quiet || (git commit -m "chore: daily brief $(date +'%Y-%m-%d')" && git push)
+
+      - name: Send daily email digest
+        continue-on-error: true
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+        run: python scripts/send_email.py

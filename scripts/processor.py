@@ -121,6 +121,7 @@ def process_items(items: List[dict], system_prompt: str, max_workers: int = 4) -
 
     results.sort(key=lambda x: (x.get("score", 0), x.get("published_at", "")), reverse=True)
     if not results:
+        raise RuntimeError(
         f"All {len(items)} AI requests failed. Check secrets LLM_API_KEY / "
         f"LLM_BASE_URL / LLM_MODEL (current model: {model}, base_url: {base_url}."
         )

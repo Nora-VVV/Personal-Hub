@@ -1,0 +1,311 @@
+{
+  "date": "2026-11-27",
+  "generated_at": "2026-11-27T06:20:05+08:00",
+  "categories": [
+    {
+      "id": "battery",
+      "name": "电池与储能学术"
+    },
+    {
+      "id": "ai",
+      "name": "AI 前沿"
+    },
+    {
+      "id": "science",
+      "name": "科学发现与 AI4S"
+    },
+    {
+      "id": "education",
+      "name": "教育教学"
+    },
+    {
+      "id": "industry",
+      "name": "储能产业"
+    }
+  ],
+  "stats": {
+    "fetched": 48,
+    "processed": 9,
+    "high_value": 1
+  },
+  "items": [
+    {
+      "id": "559151a9c3ea",
+      "title_zh": "Real2SimLab：面向真实到仿真迁移的统一平台",
+      "title_orig": "Real2SimLab: A Unified Platform for Real-to-Simulation Transfer",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.34849",
+      "doi": "10.48550/arXiv.2611.34849",
+      "authors": [
+        "Yongchang Zhang",
+        "Jie Huang",
+        "Yunhe Ni",
+        "Ningyu Zhou",
+        "Guangyu Zhao",
+        "Ruixun Liu",
+        "Rui Huang",
+        "Yidi Wu",
+        "TianZe Zhang",
+        "Zixiang Jiang",
+        "Xiang Li",
+        "Kevin Shen"
+      ],
+      "published_at": "2026-11-25",
+      "score": 4.0,
+      "tags": [
+        "真实到仿真",
+        "编码智能体",
+        "统一评测平台"
+      ],
+      "tldr": {
+        "problem": "各基准自定义输入、交付物与评分，导致N个方法×M个基准重复集成。",
+        "method": "统一运行方法生成的仿真程序，并调用各基准原生评分器；另建训练数据与奖励标注流水线，过滤基准视频防污染。",
+        "takeaway": "已支持47个编码智能体、5种非智能体方法和6个基准；平台与近300篇论文图谱开源，摘要未给性能提升数据。"
+      },
+      "conditions_and_metrics": "明确事实：6个基准；47个编码智能体；5种非智能体方法；输入为视频记录；用各基准原始评分器打分；训练数据流水线过滤基准中已有视频以防污染；平台与Awesome-Real2Sim开源。⚠️ 摘要未披露具体基准名称、评分一致性、训练数据规模或量化性能对比。",
+      "deep_dive": "【核心实现】把真实到仿真迁移方法统一为“运行其生成的仿真程序+调用原基准评分器”，避免为每个方法/基准单独写适配；另建训练数据与奖励标注流水线，先过滤基准中已有视频防污染，再用同一评分代码计算奖励。\n【证据强度】摘要只给平台覆盖面（47个智能体/5种方法/6个基准）和开源，未给方法在新平台上的复现一致性、评分偏差、训练数据质量或下游性能提升；缺少跨基准统计与消融。\n【原文核验】重点查平台如何保证各基准原生评分器可复现、视频过滤是否彻底；看训练奖励与评测奖励同源是否引入过拟合或数据泄漏。",
+      "inspiration": "对电池预警算法无直接迁移价值；但其“统一评测+防泄漏奖励流水线”思路可借鉴到电池预测基准整合，以及评估智能体生成故障诊断程序的可复现性。"
+    },
+    {
+      "id": "aab58790f2cc",
+      "title_zh": "有机电极实现全固态电池低压力运行",
+      "title_orig": "Low-pressure operation of all-solid-state batteries enabled by an organic electrode",
+      "source": "Nature Communications",
+      "category": "battery",
+      "url": "https://doi.org/10.1038/s41467-026-79379-8",
+      "doi": "10.1038/s41467-026-79379-8",
+      "authors": [
+        "Zhaoyang Chen",
+        "Alae Eddine Lakraychi",
+        "Santosh Thapa",
+        "Lihong Zhao",
+        "Liqun Guo",
+        "Jie Zheng",
+        "Yanliang Liang",
+        "Dan-Thien Nguyen",
+        "Yang‐Tse Cheng",
+        "Yan Yao"
+      ],
+      "published_at": "2026-11-25",
+      "score": 3.9,
+      "tags": [
+        "全固态电池",
+        "有机电极",
+        "低堆叠压力",
+        "力学自适应材料"
+      ],
+      "tldr": {
+        "problem": "全固态电池需数十MPa外压维持固-固接触与离子/电子渗流，制约实用化",
+        "method": "采用低模量、低硬度、蠕变顺应性有机活性材料TAQ，在低压下自适应形变",
+        "takeaway": "1MPa下0.5C循环100圈保持80.3%容量；0.2MPa下电极结构完整"
+      },
+      "conditions_and_metrics": "TAQ有机正极；纳米压痕测得模量8.4–15.3GPa、硬度0.33–0.76GPa、蠕变柔量m=0.038–0.073（原始态与锂化态）；1MPa外压、0.5C循环100圈容量保持80.3%；0.2MPa下operando与后期电镜显示结构完整。⚠️ 摘要未披露固态电解质种类、对锂或全电芯构型、能量密度、温度工况及倍率泛化数据。",
+      "deep_dive": "【核心实现】以TAQ为模型有机正极，利用其低模量、低硬度与中等蠕变顺应性，使电极在低堆叠压力下自适应形变，从而在不依赖数十MPa外压的条件下维持固-固接触与离子/电子渗流，提出“力学自适应材料”设计策略。\n【证据强度】给出了纳米压痕的力学量化，以及真实固态电池的循环数据（1MPa、0.5C、100圈保持80.3%），证据链较实；但摘要未给出高模量材料对照组、全电芯能量密度、温度与倍率泛化，循环仅100圈属中等长度，长期稳定性与库伦效率细节缺失。\n【原文核验】先核查1MPa与0.2MPa条件下的充放电曲线：库伦效率与电压极化如何演化，以及力学参数与容量保持率之间的因果是否用高模量对照材料做消融；再查operando电镜是否量化了接触面积与孔隙率变化。",
+      "inspiration": "对电池预测预警的直接迁移价值有限，但“力学自适应/接触失效”可作为电极退化建模的物理先验，也能当作材料-力学-电化学耦合的教学案例。"
+    },
+    {
+      "id": "dc00b576f08f",
+      "title_zh": "DocSEAM：面向多页文档理解的双向跨页编码",
+      "title_orig": "DocSEAM: Bidirectional Cross-Page Encoding for Multi-Page Document Understanding",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.34420",
+      "doi": "10.48550/arXiv.2611.34420",
+      "authors": [
+        "Hoang-Nhat Nguyen",
+        "Chen Change Loy"
+      ],
+      "published_at": "2026-11-25",
+      "score": 3.8,
+      "tags": [
+        "多页文档VQA",
+        "视觉语言模型",
+        "跨页上下文融合"
+      ],
+      "tldr": {
+        "problem": "多页文档VLM逐页独立编码，页边界处视觉token缺失邻页上下文。",
+        "method": "在视觉编码器与LM间插入DocSEAM：以当前页和前后邻页组成三元组，做中心锚定的掩码自注意力与方向显著性门控，仅返回增强后的中心页token。",
+        "takeaway": "9B模型在5个多页文档VQA基准上，于≤10B开源模型中达SOTA；重分页实验降低边界敏感性。"
+      },
+      "conditions_and_metrics": "明确：预训练视觉编码器与LM之间插入轻量模块；每页与前后两页构成局部三元组；中心锚定掩码自注意力+方向显著性门控；输出token数不变；先跨页监督预热，再冻结DocSEAM做多页微调；9B参数；5个多页文档VQA基准；对比≤10B开源模型；受控重分页测试降低边界敏感性并改善跨页跨度定位。⚠️ 摘要未给具体数据集名称、准确率数值、消融幅度与训练成本。",
+      "deep_dive": "【核心实现】不改视觉编码器与LM，只在二者之间加入DocSEAM：把当前页与前后邻页组成局部三元组，用中心锚定掩码自注意力只让邻页信息汇入中心页，并以方向显著性门控控制前向/后向贡献，输出token数不变，可直接插到现有VLM流程。\n【证据强度】摘要给出9B模型、5个多页VQA基准、≤10B开源模型对比及重分页鲁棒性，方向明确；但缺少具体准确率提升、逐基准数据、模块参数量、消融实验，也未说明跨页跨度定位的量化指标与失败案例。\n【原文核验】优先查5个基准的主结果表，确认相对逐页独立编码基线的绝对提升；再查重分页实验设置，看边界敏感性下降是否伴随页序错乱或长文档退化。",
+      "inspiration": "对电池预警没有直接可用的方法；其“中心页+邻页局部上下文+门控融合”的结构可概念性迁移到多片段/多传感器时序建模，例如用相邻循环窗口增强中心窗口特征，但摘要未涉及不确定性量化或故障诊断，跨领域价值有限。"
+    },
+    {
+      "id": "a0b26dd18385",
+      "title_zh": "Energy Vault订单积压达23亿美元，并为德州150MW BESS完成融资",
+      "title_orig": "Energy Vault backlog hits US$2.3 billion as it closes financing for 150MW Texas BESS",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/energy-vault-backlog-hits-us2-3-billion-as-it-closes-financing-for-150mw-texas-bess/",
+      "doi": "",
+      "authors": [
+        "April Bonner"
+      ],
+      "published_at": "2026-11-26",
+      "score": 2.9,
+      "tags": [
+        "储能项目融资",
+        "BESS",
+        "订单积压"
+      ],
+      "tldr": {
+        "problem": "BESS项目融资落地与订单规模披露，但缺技术细节",
+        "method": "Energy Vault在Q3 2026财报中披露，为德州150MW/300MWh SOSA储能中心完成无追索项目融资",
+        "takeaway": "订单积压达23亿美元；摘要未给电池体系、效率或安全指标"
+      },
+      "conditions_and_metrics": "公司：NYSE上市Energy Vault；时间：Q3 2026财报；项目：德州SOSA Energy Centre，150MW/300MWh（2小时系统）；融资：无追索项目融资已关闭；订单积压：US$2.3 billion；⚠️ 摘要未披露电芯化学体系、capex、PPA、并网节点及安全/衰减指标。",
+      "deep_dive": "【核心实现】这是企业财务与项目融资进展披露，不是技术论文：Energy Vault宣布Q3 2026业绩，并完成德州150MW/300MWh SOSA储能中心的无追索项目融资，同时给出23亿美元订单积压。\n【证据强度】证据仅为公司公告级事实，缺少项目投资额、融资结构、承购协议、设备选型和并网时间表；无法判断其BESS技术路线、循环效率、热管理或安全设计是否可靠。\n【原文核验】若下载原文，先核查融资条款与项目时间表，再核查订单积压中多少已转为确定合同、多少依赖未披露的客户或项目条件。",
+      "inspiration": "对储能工程教学可作为“订单积压+无追索融资”案例；对电池预警与AI研究无直接技术价值，除非后续披露BESS运维与安全数据。"
+    },
+    {
+      "id": "4264f5ba37a8",
+      "title_zh": "Actuate Energy向阳光电源订购1.5GWh储能系统，用于西班牙2027/2028项目管道",
+      "title_orig": "Actuate Energy orders 1.5GWh of BESS from Sungrow for 2027/2028 pipeline in Spain",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/actuate-energy-orders-1-5gwh-bess-sungrow-2027-2028-pipeline-spain/",
+      "doi": "",
+      "authors": [
+        "Cameron Murray"
+      ],
+      "published_at": "2026-11-26",
+      "score": 2.8,
+      "tags": [
+        "储能订单",
+        "西班牙",
+        "阳光电源",
+        "BESS"
+      ],
+      "tldr": {
+        "problem": "西班牙2027/2028储能项目管道需锁定BESS供货与集成产能",
+        "method": "Actuate Energy与阳光电源签署380MW/1,500MWh供货协议",
+        "takeaway": "仅披露规模与时间窗口，未给价格、技术路线、并网或收益数据"
+      },
+      "conditions_and_metrics": "明确事实：Actuate Energy与阳光电源签署380MW/1,500MWh BESS协议，项目位于西班牙，覆盖2027/2028项目管道。⚠️ 摘要未披露电芯体系、PCS配置、具体选址、并网节点、价格、交付里程碑及收益模式。",
+      "deep_dive": "【核心实现】这是一则商业供货协议：Actuate Energy向阳光电源锁定西班牙380MW/1,500MWh BESS供货，覆盖2027/2028项目管道，未涉及技术路线或系统架构。\n【证据强度】摘要仅有一句交易规模与时间窗，缺少项目选址、并网/容量市场机制、电芯与PCS配置、价格及交付里程碑；属于订单信号而非工程验证。\n【原文核验】若下载原文，先核查协议是否具约束力、1.5GWh是否对应最终投资决策项目，以及是否披露西班牙并网排队与收益模式细节。",
+      "inspiration": "对高校科研的直接价值有限；可作为储能出海订单与2027/2028交付周期的产业信号，但缺乏工况、并网和收益数据，不能支撑具体技术选题。"
+    },
+    {
+      "id": "081120fd7a6b",
+      "title_zh": "Zelestra与Statkraft签署意大利8年期BESS收费协议，称双边市场与MACSE并行发展",
+      "title_orig": "Zelestra and Statkraft agree 8-year Italy BESS toll as ‘bilateral market develops in parallel to MACSE’",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/zelestra-statkraft-8-year-italy-bess-toll-bilateral-market-develops-parallel-macse/",
+      "doi": "",
+      "authors": [
+        "Cameron Murray"
+      ],
+      "published_at": "2026-11-26",
+      "score": 2.5,
+      "tags": [
+        "意大利BESS",
+        "储能tolling协议",
+        "MACSE拍卖",
+        "双边市场"
+      ],
+      "tldr": {
+        "problem": "意大利BESS收益仍依赖MACSE拍卖，双边toll市场尚在形成",
+        "method": "Zelestra与Statkraft签署8年期BESS toll协议，时点在第二次MACSE拍卖结束后数日",
+        "takeaway": "确认有8年期商业协议；摘要未给容量、价格、拍卖结果或投运信息"
+      },
+      "conditions_and_metrics": "明确事实：意大利市场；Zelestra与挪威国有的Statkraft签署8年期BESS toll协议；签约发生在意大利第二次MACSE拍卖结束数日后。⚠️ 摘要未披露项目规模（MW/MWh）、交易金额、toll费用结构、拍卖中标价格、项目投运时间及具体站点。",
+      "deep_dive": "【核心实现】摘要仅披露商业安排：IPP Zelestra与Statkraft签订8年期BESS toll协议，即由交易对手获取储能调度权并支付费用；文本未说明资产规模、收益分成或调度规则。\n【证据强度】信息量极低，只有一句交易事实和MACSE时间背景，没有容量、价格、拍卖结果、项目状态等可核查数据，无法评估交易经济性或市场影响。\n【原文核验】下载全文后先核查协议对应的BESS项目规模与并网/投运时间；再核查第二次MACSE拍卖的清算价格、中标容量及toll协议是否作为拍卖外收益补充。",
+      "inspiration": "对储能商业模式观察有一定信号价值：意大利在MACSE拍卖之外出现8年期双边toll，可作为BESS收益结构案例跟踪；但摘要无技术或量化细节，对电池预警算法研究无直接用处。"
+    },
+    {
+      "id": "d4e47fdfef3c",
+      "title_zh": "European Energy在澳Mokoan光伏电站接收88MWh储能电池单元",
+      "title_orig": "‘An early Christmas present’: European Energy takes delivery of 88MWh battery storage units in Australia",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/european-energy-88mwh-battery-storage-australia/",
+      "doi": "",
+      "authors": [
+        "George Heynes"
+      ],
+      "published_at": "2026-11-26",
+      "score": 2.0,
+      "tags": [
+        "澳大利亚储能",
+        "光伏配储",
+        "BESS交付"
+      ],
+      "tldr": {
+        "problem": "光伏电站配套储能的设备交付与项目落地进度",
+        "method": "首批BESS单元运抵维多利亚州北部Mokoan在运光伏电站",
+        "takeaway": "仅披露88MWh总规模与首批到货，无任何量化性能指标"
+      },
+      "conditions_and_metrics": "项目地点：澳大利亚维多利亚州北部Mokoan光伏电站（已在运）；规模：BESS总计88MWh，首批电池单元到场；开发方：European Energy（丹麦）。⚠️ 摘要未披露电芯体系、集成商、PCS、MW功率与时长配置、并网时间、投资额及收益模式。",
+      "deep_dive": "【核心实现】本质是项目物流节点通报：European Energy在维多利亚州北部Mokoan在运光伏电站启动配套BESS进场，总量88MWh，首批单元已交付。摘要未给出技术路线、集成方案或并网安排。\n【证据强度】仅“首批到货”一个事实，缺少MW功率与时长（2h或4h）、电芯与集成商、投运节点，以及澳洲NEM下FCAS与现货套利的收益假设；属典型企业通稿，无可验证的工程细节。\n【原文核验】若追全文：先核查是否补出功率规模和时长配置，再核查并网/投运时间表，以及是否提及维多利亚州并网排队或AEMO接入条件。",
+      "inspiration": "对电池预警、故障诊断或AI4S研究几乎无直接价值；唯一用途是作为“光伏配储”真实落地案例，在课堂或产业分析中说明澳洲NEM下配储的规模量级与推进节奏。"
+    },
+    {
+      "id": "b89aa7f83395",
+      "title_zh": "2026年储能奖揭晓：Fluence、Quinbrook与NHOA再次获奖，CMBlu与ContourGlobal首次上榜",
+      "title_orig": "Energy Storage Awards 2026: Fluence, Quinbrook & NHOA win again, CMBlu & ContourGlobal among first-timers",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/energy-storage-awards-2026-fluence-quinbrook-nhoa-win-again-cmblu-contourglobal-among-first-timers/",
+      "doi": "",
+      "authors": [
+        "Andy Colthorpe"
+      ],
+      "published_at": "2026-11-26",
+      "score": 1.2,
+      "tags": [
+        "储能奖项",
+        "行业活动",
+        "企业动态"
+      ],
+      "tldr": {
+        "problem": "无具体工程或科学问题，仅为行业评奖结果通报",
+        "method": "列举获奖企业名单，未涉及技术方案或项目细节",
+        "takeaway": "摘要未给任何量化指标或技术数据"
+      },
+      "conditions_and_metrics": "⚠️ 摘要未披露具体实验工况或量化指标；仅提及2026年储能奖颁奖，获奖者包括Fluence、Quinbrook、NHOA、CMBlu、ContourGlobal等，无项目规模、技术参数或事故数据。",
+      "deep_dive": "【核心实现】文本仅报道2026年Energy Storage Awards颁奖结果，列出部分获奖企业（Fluence、Quinbrook、NHOA为再次获奖，CMBlu、ContourGlobal首次获奖），未阐述任何技术路线或项目内容。\n【证据强度】信息量为零，无数据、无案例、无对比；属于公关通稿式活动回顾，无法评估技术或工程价值。\n【原文核验】若下载全文，唯一可核查的是获奖名单是否完整、各奖项类别对应企业，但预计无技术细节。",
+      "inspiration": "对电池预警研究、工程教学或储能安全认知无实质帮助；仅可作行业企业名录参考，不建议投入精读时间。"
+    },
+    {
+      "id": "7fe905d609e4",
+      "title_zh": "PFN–BST陶瓷的结构分析、电子结构与光学性质及光催化和抗菌应用",
+      "title_orig": "Structural analysis, electronic structure and optical properties of PFN–BST ceramic with photocatalytic and antimicrobial applications",
+      "source": "Scientific Reports",
+      "category": "battery",
+      "url": "https://doi.org/10.1038/s41598-026-78850-2",
+      "doi": "10.1038/s41598-026-78850-2",
+      "authors": [
+        "Dinesh Kumar Pati",
+        "Shreyash Mahapatra",
+        "Kumari Anchal",
+        "Subhendu Chakroborty",
+        "Mitrabinda Mahapatra",
+        "Rajashri R. Urkude",
+        "Jitendra Malviya",
+        "Subhash Banerjee",
+        "Chandra Chakraborty",
+        "Piyush R. Das",
+        "Rajeev Dwivedi",
+        "Rajib Padhee"
+      ],
+      "published_at": "2026-11-25",
+      "score": 1.2,
+      "tags": [
+        "PFN–BST陶瓷",
+        "光催化",
+        "抗菌"
+      ],
+      "tldr": {
+        "problem": "研究PFN–BST陶瓷的构效关系及光催化/抗菌性能，与电池储能无关。",
+        "method": "固相法制备(Ba0.8Sr0.2)TiO3改性Pb(Fe0.5Nb0.5)O3，联合Rietveld、XPS、XANES/EXAFS等表征。",
+        "takeaway": "带隙2.56 eV；光催化降解甲基橙，抗菌测MIC与抑菌圈；无电池相关指标。"
+      },
+      "conditions_and_metrics": "固相法制备；主相为四方钙钛矿；FTIR检出Ti–O、Nb–O振动；UV-vis带隙2.56 eV；可见光下降解甲基橙；抗菌以MIC和ZOI评价，并设氨苄青霉素对照。⚠️ 摘要未给降解率、动力学、MIC/ZOI具体数值，也无任何电化学或电池测试。",
+      "deep_dive": "【核心实现】以固相法合成(Ba0.8Sr0.2)TiO3改性的Pb(Fe0.5Nb0.5)O3陶瓷，用Rietveld、FTIR、Raman、FESEM/EDS、AFM、XPS及XANES/EXAFS表征晶体结构、形貌、化学环境和局域电子结构，并测试可见光光催化降解甲基橙与抗菌性能。\n【证据强度】摘要只给出带隙2.56 eV和定性结论，未披露甲基橙降解效率、反应速率常数、循环稳定性，也未列MIC/ZOI具体数值与菌株差异；对氧空位与带隙关联也仅为分析性陈述。\n【原文核验】若下载全文，先核查光催化降解曲线与速率常数图，再核查抗菌MIC/ZOI表格及对照设置；同时确认Rietveld相纯度与氧空位表征是否支持带隙调控结论。",
+      "inspiration": "对电池/电容预测预警、储能安全与AI4S无直接价值，不建议因领域标签下载；仅在做陶瓷光催化或抗菌材料时才有参考意义。"
+    }
+  ]
+}

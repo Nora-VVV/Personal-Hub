@@ -1,0 +1,497 @@
+{
+  "date": "2026-11-28",
+  "generated_at": "2026-11-28T06:19:41+08:00",
+  "categories": [
+    {
+      "id": "battery",
+      "name": "电池与储能学术"
+    },
+    {
+      "id": "ai",
+      "name": "AI 前沿"
+    },
+    {
+      "id": "science",
+      "name": "科学发现与 AI4S"
+    },
+    {
+      "id": "education",
+      "name": "教育教学"
+    },
+    {
+      "id": "industry",
+      "name": "储能产业"
+    }
+  ],
+  "stats": {
+    "fetched": 37,
+    "processed": 15,
+    "high_value": 4
+  },
+  "items": [
+    {
+      "id": "9c30b90bc7db",
+      "title_zh": "Entangle：跨未见任务与上下文扩展人类视频上下文世界-动作模型",
+      "title_orig": "Entangle: Scaling Human-Video In-Context World-Action Models across Unseen Tasks and Contexts",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.28732",
+      "doi": "10.48550/arXiv.2611.28732",
+      "authors": [
+        "Chendong Xiang",
+        "Chengwen Zhang",
+        "Ruowen Zhao",
+        "Zeyuan Wang",
+        "Shuhe Huang",
+        "Rongxu Cui",
+        "Min Zhao",
+        "Fan Bao",
+        "Hengkai Tan",
+        "Jun Zhu"
+      ],
+      "published_at": "2026-11-25",
+      "score": 4.4,
+      "tags": [
+        "人类视频上下文学习",
+        "世界-动作模型",
+        "机器人操作",
+        "任务内对比学习",
+        "OOD泛化"
+      ],
+      "tldr": {
+        "problem": "人类视频上下文学习难以与机器人动作时间对齐，且策略易依赖任务身份捷径。",
+        "method": "用视频到视频生成构造时间对齐人类上下文，叠加变长视频窗口与任务内对比目标训练WAM。",
+        "takeaway": "6个未见任务均分83.5/100；7个RoboTwin任务成功率69.5%，超Zero-WAM 22.6个百分点。"
+      },
+      "conditions_and_metrics": "机器人平台：Astribot S1与RoboTwin仿真；6个未见任务平均得分83.5/100；7个未见RoboTwin任务平均成功率69.5%，较Zero-WAM高22.6个百分点；Context-OOD含布局重排与工具替换；无任务特定微调。",
+      "deep_dive": "【核心实现】把单段人类视频与当前机器人观测映射为未来视觉状态和可执行动作；训练数据用视频到视频生成将机器人视频转为时间对齐的人类上下文，并混入真实配对记录；用变长视频窗口和任务内对比目标区分配对动作轨迹与其他同任务执行，抑制初始场景或任务身份捷径。\n【证据强度】摘要给出跨未见任务成功率和Context-OOD迁移，量化较硬；但缺少消融幅度、真实与生成配对比例、跨机器人平台泛化及失败类型分析，视频生成伪配对偏差也未量化。\n【原文核验】先查任务内对比目标的消融表与Context-OOD设置，确认提升来自防捷径而非数据泄漏；再核查视频到视频生成数据的质量筛选及真实配对占比。",
+      "inspiration": "对电池预警不直接可用；可借用其任务内对比防捷径与Context-OOD评测，设计跨工况/跨电芯小样本故障诊断，避免模型靠电站ID或初始状态走捷径。视频世界模型本身不宜硬迁移。"
+    },
+    {
+      "id": "e2bf3dac2b7c",
+      "title_zh": "Stable Gated DeltaNet-2：理解并缓解循环状态不稳定性",
+      "title_orig": "Stable Gated DeltaNet-2: Understanding and Mitigating Recurrent State Instability",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.34051",
+      "doi": "10.48550/arXiv.2611.34051",
+      "authors": [
+        "Xichong Zhang",
+        "Xixuan Hao",
+        "Zhichen Liu",
+        "Le Zhou",
+        "Zeyu Zhang",
+        "Boyu Chen",
+        "Mingfei Lu",
+        "Zehao Lin",
+        "Bo Tang",
+        "Yonggang Zhang",
+        "Linyun Liu",
+        "Feiyu Xiong"
+      ],
+      "published_at": "2026-11-25",
+      "score": 4.3,
+      "tags": [
+        "线性注意力",
+        "门控DeltaNet",
+        "训练稳定性",
+        "长上下文"
+      ],
+      "tldr": {
+        "problem": "GDN-2长上下文训练易崩溃，擦除方向不对称致状态指数增长",
+        "method": "对称擦除保证非扩张传播，衰减调控残差写入保留写灵活性，并维持分块并行",
+        "takeaway": "1.6B模型128K RULER均值+6.80，九项下游平均+0.62，训练稳定"
+      },
+      "conditions_and_metrics": "模型规模约1.6B；长上下文训练；128K RULER平均分；九个下游任务平均准确率；对比基线GDN-2；分 recurrent 与 hybrid 两种设置。⚠️ 摘要未披露具体数据集清单、训练token量、消融实验及失败率曲线。",
+      "deep_dive": "【核心实现】GDN-2对擦除与写入做独立通道控制，但擦除的读/改方向不对称产生非正规算子，方向增益跨token累积引发状态爆炸；Stable GDN-2改用对称擦除使状态传播非扩张，并以衰减调控残差写入保留写入灵活性，理论给出O(T)状态增长上界且保留chunkwise并行。\n【证据强度】有1.6B规模实测、128K RULER +6.80和九任务+0.62的量化结果，论证比纯架构宣称扎实；但摘要缺对称擦除与残差写入的消融、不同序列长度稳定性曲线、训练失败率及额外计算开销。\n【原文核验】先查循环状态范数随token/层数的曲线是否真被压制；再查RULER各子任务与hybrid设置下增益是否一致，以及O(T)上界依赖的假设。",
+      "inspiration": "对电池时序预测不能直接迁移；真正可借鉴的是长序列递归模型的状态幅值约束与训练稳定性诊断。若你做长上下文老化序列或递归状态监测，可参考对称约束与衰减残差写入思路，否则仅作架构稳定性参考。"
+    },
+    {
+      "id": "07520aa19306",
+      "title_zh": "用代码解决视觉任务：编程智能体是比视频模型更强的视觉推理者",
+      "title_orig": "Solve Vision with Code: Coding Agents Are Stronger Visual Reasoners Than Video Models",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.34813",
+      "doi": "10.48550/arXiv.2611.34813",
+      "authors": [
+        "Dezhi Luo",
+        "Fengyuan Yu",
+        "Haotian Zhang",
+        "Zehong Zhao",
+        "Ran Ji",
+        "Siyuan An",
+        "Huayi Qin",
+        "Qingying Gao",
+        "Zhongang Cai",
+        "Lei Yang",
+        "Ziqi Huang",
+        "Ruisi Wang"
+      ],
+      "published_at": "2026-11-25",
+      "score": 4.2,
+      "tags": [
+        "代码智能体",
+        "视觉推理",
+        "视频生成",
+        "基准评测"
+      ],
+      "tldr": {
+        "problem": "视频模型是否比代码路径更可靠地完成视觉推理，此前未同条件对比",
+        "method": "在同一基准、首帧与提示下，让编程智能体写程序渲染答案视频，与视频模型用同一规则评估器对比",
+        "takeaway": "闭源智能体得分为0.923/0.894/0.893，均高于最强视频模型0.22以上；开源最佳GLM-5仅0.572"
+      },
+      "conditions_and_metrics": "VBVR-Pro-Bench：500实例、5类任务、符号真值；仅给首帧和提示，每例一次。Codex+gpt-6-astra得0.923、Claude Code+Fable 5.1得0.894、Gemini CLI+Gemini 3.1 Pro得0.893，均超最强视频模型0.22+；23个开源模型中GLM-5最高0.572。⚠️未披露视频模型具体分数、任务明细与评估器规则。",
+      "deep_dive": "【核心实现】把“视觉推理”改成可执行程序合成：在相同首帧与提示下，编程智能体写程序渲染答案视频，再由未修改的规则评估器打分，从而与视频生成模型在相同输入、输出和评估下对比。\n【证据强度】闭源智能体大幅领先且开源最佳仅0.572，说明任务可能偏向可符号化、可计算的问题；摘要未给视频模型具体分数、消融、提示敏感性、任务类别分布，也未说明失败来自代码执行还是视觉理解。\n【原文核验】先查VBVR-Pro-Bench五类任务的构成与样例，确认是否人为偏向代码可解；再查表/图看最强视频模型逐类得分及编程智能体失败案例，判断0.22差距是否由基准选择造成。",
+      "inspiration": "不能直接迁移到电池时序预测；但可借鉴“代码智能体自动合成特征、规则与评估闭环”，用于小样本故障诊断，但需警惕基准偏向可编程任务。"
+    },
+    {
+      "id": "e9bffab1dad4",
+      "title_zh": "预测排行榜能确立什么：零样本时间序列模型的分辨率报告",
+      "title_orig": "What a Forecasting Leaderboard Can Establish: Resolution Reporting for Zero-Shot Time-Series Models",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.31619",
+      "doi": "10.48550/arXiv.2611.31619",
+      "authors": [
+        "Arya Sikder",
+        "Sriram Pillutla"
+      ],
+      "published_at": "2026-11-23",
+      "score": 4.1,
+      "tags": [
+        "时间序列基础模型",
+        "排行榜评估",
+        "零样本预测",
+        "基准分辨率"
+      ],
+      "tldr": {
+        "problem": "时间序列排行榜未说明其数据集能检测多小的模型差异",
+        "method": "提出Vernier，用榜单已公开的逐数据集分数计算可分辨名次差、不可区分条目及排序翻转",
+        "takeaway": "GIFT-Eval仅分辨6.8个名次、相邻差0.91；多榜单分辨率是相邻差距3.6–19倍"
+      },
+      "conditions_and_metrics": "GIFT-Eval可分辨6.8个名次，相邻差0.91，前十不足两个可分辨步；fev-bench、Chronos Benchmark II、TIME分辨率达相邻差的3.6–19倍；BOOM用2554条序列可分辨前十；四榜单一次更新反转43对前十（七次一遇）；70组配置缩短历史使3/4模型误差升高，两个升15%。",
+      "deep_dive": "【核心实现】Vernier从排行榜已公开的逐数据集分数计算“分辨率”，即榜单能检测的最小名次差，并报告无法与榜首区分的条目及不同提交池下的排序变化。还检查历史长度是否被记录，并用70组配置测试缩短历史对误差的影响。\n【证据强度】摘要给出多个榜单的量化分辨率与翻转统计，证据具体；但未说明Vernier的统计假设、置信区间、数据集相关性处理，也未给出除历史长度外其他元数据缺失的系统分析。\n【原文核验】打开全文先核查Vernier计算分辨率的公式与假设，尤其是把各数据集视为独立来源的条件；再查四榜单43对翻转的原始更新记录与70组历史长度实验的模型/数据设置。",
+      "inspiration": "对电池时序预测有间接但实用的警示：若用少量公开数据集或榜单比较模型，需先报告可分辨差异和排名稳定性；但不能直接迁移为电池故障预警方法。"
+    },
+    {
+      "id": "556d01363875",
+      "title_zh": "OS-Omni：跨平台长时程工作流通用计算机使用智能体基准",
+      "title_orig": "OS-Omni: Benchmarking Generalist Computer-Using Agents on Long-Horizon Workflows Across Platforms",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.34232",
+      "doi": "10.48550/arXiv.2611.34232",
+      "authors": [
+        "Hui Shen",
+        "Yunta Hsieh",
+        "Jianing Ma",
+        "Zhuoran Yin",
+        "Zhuhan Bao",
+        "Ziyuan Liu",
+        "Qi Han",
+        "Xiuqi Xu",
+        "Xianbang Wang",
+        "Wenhao Chai",
+        "Sihan Xu",
+        "Chenyang Zhao"
+      ],
+      "published_at": "2026-11-25",
+      "score": 3.8,
+      "tags": [
+        "跨平台基准",
+        "计算机使用智能体",
+        "长时程任务",
+        "最终状态评估"
+      ],
+      "tldr": {
+        "problem": "现有基准割裂Web/移动/桌面，无法衡量单智能体跨系统长时程持久状态操作能力。",
+        "method": "构建OS-Omni实时跨平台基准：6环境、平台适配器、轨迹日志与可执行最终状态评估器。",
+        "takeaway": "v1任务平均67.54步，最强智能体68.5%成功率，低于人类77.3%；iOS/macOS差距>25点。"
+      },
+      "conditions_and_metrics": "6平台；v1每平台48任务+12跨平台；任务平均67.54步 vs OSWorld 15.0；最强Claude Opus 5.5 68.5%，人类77.3%；iOS/macOS落后>25点。⚠️未披露模型清单、任务类别分布、方差与评估器鲁棒性。",
+      "deep_dive": "【核心实现】OS-Omni以6个操作系统/Web环境为实时执行底座，提供可复现初始化、平台适配器、轨迹日志和可执行最终状态评估器，并用带持久状态的服务型应用覆盖账户、购物车、预算、日历、消息等长时程工作流。\n【证据强度】摘要给出任务步数、人类基线和最强智能体分平台成功率，说明任务复杂度与平台不均衡有量化支撑；但缺少模型配置、任务类别分布、重复运行方差、评估器误判率及消融分析。\n【原文核验】打开PDF先查每平台任务表与iOS/macOS低分案例，确认失败是状态跟踪、跨应用切换还是评估器限制；再查人类研究协议与最终状态评估器的鲁棒性验证。",
+      "inspiration": "对电池预警时序预测无直接迁移价值；可借鉴其“轨迹日志+可执行最终状态评估”思路，用于评估电池运维Agent或实验自动化流程，但任务域与故障诊断、不确定性量化关联弱。"
+    },
+    {
+      "id": "57496d9fc1a7",
+      "title_zh": "植物合成化疗药紫杉醇的概念验证",
+      "title_orig": "Life-saving cancer drug pumped out by a plant",
+      "source": "Nature News",
+      "category": "science",
+      "url": "https://www.nature.com/articles/d41586-026-03801-w",
+      "doi": "",
+      "authors": [],
+      "published_at": "2026-11-27",
+      "score": 3.0,
+      "tags": [
+        "植物合成生物学",
+        "紫杉醇",
+        "异源生物合成"
+      ],
+      "tldr": {
+        "problem": "能否在植物体内异源合成化疗药紫杉醇尚待验证。",
+        "method": "让一种烟草相关植物合成紫杉醇，作为概念验证。",
+        "takeaway": "摘要仅称概念验证成功，未给产量、纯度或成本数据。"
+      },
+      "conditions_and_metrics": "⚠️ 摘要未披露植物底盘具体种类、合成途径基因、紫杉醇产量/纯度、提取工艺、生长周期或成本对比；仅说明为概念验证研究。",
+      "deep_dive": "【核心实现】以烟草相关植物为底盘异源合成紫杉醇，摘要只给概念验证结论，未说明是完整途径重构、关键酶模块替换还是前体供给优化。\n【证据强度】证据仅为Nature News简讯，缺产量、纯度、生长周期、提取成本和与现有生产方式的对比；也无法判断是否实现完整从头合成。\n【原文核验】若追原文，先查紫杉醇定量图（产量/干重或培养体积）及化学结构确证（LC-MS/NMR）；再查是否需要外源前体、是否仅为中间体转化。",
+      "inspiration": "对你的电池预警、储能安全和工程教学无直接迁移价值；仅可作为“概念验证”传播案例，提醒读新闻稿必须回查产量与纯度等硬指标。"
+    },
+    {
+      "id": "a998f598780b",
+      "title_zh": "Wernicke区在言语中的神秘作用终获解析",
+      "title_orig": "Brain area’s mysterious role in speech decoded at last",
+      "source": "Nature News",
+      "category": "science",
+      "url": "https://www.nature.com/articles/d41586-026-03800-x",
+      "doi": "",
+      "authors": [],
+      "published_at": "2026-11-27",
+      "score": 2.9,
+      "tags": [
+        "Wernicke区",
+        "言语认知",
+        "脑记录"
+      ],
+      "tldr": {
+        "problem": "Wernicke区除处理口语外是否参与其他认知任务尚不明确",
+        "method": "摘要仅称用脑记录解析其功能，未披露任务范式、记录技术与分析模型",
+        "takeaway": "称其参与一项相关认知任务，但摘要无效应量、准确率或统计指标"
+      },
+      "conditions_and_metrics": "⚠️ 摘要未披露受试者数量、电极/成像类型、语言任务、对照条件、脑区定位方法与量化效应；仅称脑记录揭示Wernicke区对相关认知任务有贡献。",
+      "deep_dive": "【核心实现】摘要只给出结论：Wernicke区不限于口语词汇处理，还参与一项未点名的相关认知任务；具体如何通过脑记录分离该区功能、采用何种任务对照，摘要未说明。\n【证据强度】证据来自“脑记录”，但缺少受试者、记录技术、任务设计、对照与统计结果，无法判断是相关性还是因果贡献；Nature News简讯本身也不是原始论文。\n【原文核验】若下全文，先核查原始论文的脑区定位图与任务对照表，确认“crucial contribution”对应的效应量、时间窗、是否比较相邻语言区，以及有无因果干预验证。",
+      "inspiration": "对电池预警、储能安全或教学改革无直接迁移价值；若关注AI4S，只能把它当作“脑记录做功能解码”的新闻线索，摘要信息不足以提炼可复用方法。"
+    },
+    {
+      "id": "a98abd6f7324",
+      "title_zh": "南都电源（Narada Power）持续经营亏损，电池OEM跌至最低可融资性评级",
+      "title_orig": "Continued operating losses for Narada Power as battery OEM falls to lowest Bankability rating",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/continued-operating-losses-for-narada-power-as-battery-oem-falls-to-lowest-bankability-rating/",
+      "doi": "",
+      "authors": [
+        "Cameron Murray"
+      ],
+      "published_at": "2026-11-27",
+      "score": 2.8,
+      "tags": [
+        "储能产业",
+        "电池OEM",
+        "可融资性评级",
+        "经营亏损"
+      ],
+      "tldr": {
+        "problem": "电池OEM财务恶化，供应商可融资性与项目交付风险上升",
+        "method": "引用Battery StorageTech Bankability Ratings Report评级结果，未披露评级方法",
+        "takeaway": "Narada跌至最低评级；摘要未给亏损额、现金流或评级分项数据"
+      },
+      "conditions_and_metrics": "主体：中国电池OEM Narada Power；事件：持续经营亏损，2026年跌至Battery StorageTech Bankability Ratings Report最低评级；⚠️ 摘要未披露亏损金额、营收、资产负债、评级维度、项目清单或对储能电站交付的影响。",
+      "deep_dive": "【核心实现】报道只陈述Narada Power经营亏损延续，并援引Battery StorageTech Bankability Ratings Report将其降至最低可融资性评级；未解释评级模型、财务触发条件或产品/项目层面原因。\n【证据强度】证据仅为媒体转述的评级结论，缺少亏损额、现金流、订单履约、质保准备金、事故记录等硬数据；无法判断是短期财务波动还是系统性交付/安全风险。\n【原文核验】若下载原文，先核查评级报告的具体评分维度和Narada得分变化，再查其储能项目交付、质保与售后责任是否受影响。",
+      "inspiration": "对储能电站选型与供应链风险有提醒价值：OEM可融资性下调应反向约束高校合作与示范项目选择；但不含技术细节，对电池预警算法研究无直接帮助。"
+    },
+    {
+      "id": "9eb002014d7b",
+      "title_zh": "ProxyGenBench：代理引导视频生成的基准测试",
+      "title_orig": "ProxyGenBench: Benchmarking Proxy-Guided Video Generation",
+      "source": "Hugging Face Daily Papers",
+      "category": "ai",
+      "url": "https://huggingface.co/papers/2611.34457",
+      "doi": "10.48550/arXiv.2611.34457",
+      "authors": [
+        "Zhenchen Tang",
+        "Haolin Lu",
+        "Songlin Yang",
+        "Xiaotong Zhao",
+        "Ran Zhang",
+        "Bo Peng",
+        "Shuai Li",
+        "Haotian Fan",
+        "Haobin Zhong",
+        "Yanni Zhang",
+        "Songlian Li",
+        "Ning Zhang"
+      ],
+      "published_at": "2026-11-25",
+      "score": 2.8,
+      "tags": [
+        "视频生成",
+        "基准测试",
+        "结构代理控制"
+      ],
+      "tldr": {
+        "problem": "视频生成中对场景布局、运动与事件顺序的可控性不足",
+        "method": "构建含312个评测样例、60个场景的基准，用逐案例核验清单评测5个视频生成器",
+        "takeaway": "代理提升时空控制，但细节增多反而降低补全质量，结构依从不等于绑定正确"
+      },
+      "conditions_and_metrics": "312个评测案例、60个场景、3类场景任务；控制变量为代理保真度、文本详细度、多模态输入；评测5个视频生成器，采用人工核验的逐案例清单打分。⚠️ 摘要未给出具体生成器名称、量化分数与各变量下的数值对比。",
+      "deep_dive": "【核心实现】论文提出 ProxyGenBench 基准，用动画 3D blockout 等结构代理指定场景布局、运动、相机与事件顺序，并把任务拆成三项互相牵制的要求：保留结构、补全缺失内容并纠正代理伪影、将文本/图像/音频条件绑定到正确实体与事件。评测以逐案例核验清单替代笼统打分。\n【证据强度】摘要仅给出定性结论（代理改善时空控制、代理细节增加时补全变差、结构依从与绑定正确性不相关），未披露任何生成器名称、评分数值、标注者一致性或显著性检验，证据强度有限。\n【原文核验】下载全文后先看三项任务的分项得分表，确认“代理细节↑、补全↓”的效应量；再核查清单标注流程与标注者间一致性，判断结论是否稳健。",
+      "inspiration": "与电池预警、故障诊断方向无直接迁移价值；唯一可借鉴的是“逐案例核验清单”这一评测设计思路，可用于构建电池预警模型的场景化评估协议，而非模型方法本身。"
+    },
+    {
+      "id": "f86530e8dc8d",
+      "title_zh": "Alpiq为瑞士1.2GWh电池储能项目申请规划许可",
+      "title_orig": "‘Among the most powerful’: Alpiq seeks approval for 1.2GWh BESS in Switzerland",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/alpiq-1-2gwh-bess-switzerland-niedergosgen/",
+      "doi": "",
+      "authors": [
+        "George Heynes"
+      ],
+      "published_at": "2026-11-27",
+      "score": 2.7,
+      "tags": [
+        "瑞士储能",
+        "电网级BESS",
+        "规划许可"
+      ],
+      "tldr": {
+        "problem": "瑞士电网级BESS项目推进需通过规划审批与并网、消防合规",
+        "method": "Alpiq就300MW/1.2GWh项目向索洛图恩州提交规划许可申请",
+        "takeaway": "仅披露规模与地点，未给技术路线、并网与收益数据"
+      },
+      "conditions_and_metrics": "项目：300MW/1,200MWh（4小时）；地点：瑞士索洛图恩州Niedergösgen；开发商：Alpiq；状态：已提交规划许可申请。⚠️未披露电芯/PCS供应商、并网电压、消防方案、投资额、投运时间及审批时间表。",
+      "deep_dive": "【核心实现】Alpiq向瑞士索洛图恩州Niedergösgen提交300MW/1.2GWh电网级BESS规划许可申请，按功率/能量比对应4小时储能时长，属于项目开发审批阶段而非投运或技术验证。\n【证据强度】信息仅来自新闻简讯，除规模、地点和开发商外，未披露电芯体系、PCS、并网接入、消防与热失控防护、投资及收益模式；“most powerful”无横向对比或官方数据支撑。\n【原文核验】若追原文，先核查规划文件中并网接入方案与消防/热失控防护章节，并确认是否已取得电网运营商许可、当地环评与反对意见及预计投运节点。",
+      "inspiration": "对储能安全研究，可把瑞士4小时BESS的并网与消防合规要求作为欧洲项目约束样本；但该简讯无技术细节，不能直接支撑算法或实验选题，仅作项目管线跟踪。"
+    },
+    {
+      "id": "d92b3f2c182d",
+      "title_zh": "BESS行业快讯：电池测试遭质疑、RE+上的拥抱、IPP退出危机与欧洲电池竞赛失利",
+      "title_orig": "BESS Industry Buzz: Battery tests questioned, hugs at RE+, IPP exit crisis and Europe’s battery race loss",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/bess-industry-buzz-battery-tests-questioned-hugs-at-re-ipp-exit-crisis-and-europes-battery-race-loss/",
+      "doi": "",
+      "authors": [
+        "Cameron Murray"
+      ],
+      "published_at": "2026-11-27",
+      "score": 2.2,
+      "tags": [
+        "储能产业",
+        "BESS",
+        "行业快讯"
+      ],
+      "tldr": {
+        "problem": "储能行业一周舆情与工程痛点缺乏系统梳理",
+        "method": "以快讯形式汇总社交媒体上的观点、分析与传闻",
+        "takeaway": "摘要未给任何量化指标或具体案例，仅列四个话题标题"
+      },
+      "conditions_and_metrics": "⚠️ 摘要未披露具体实验工况或量化指标；仅标题提及：电池测试遭质疑、RE+展会互动、IPP退出危机、欧洲电池竞赛落后。无公司、项目规模、政策节点或数据来源。",
+      "deep_dive": "【核心实现】这是一篇行业快讯汇总，正文仅说明汇总过去一周社交媒体上的观点、分析与传闻，未展开任何一条新闻的机制、数据或采访来源。标题列出电池测试质疑、RE+展会互动、IPP退出危机、欧洲电池竞赛落后四个话题，但摘要没有给出具体公司、项目、政策条款或技术细节。\n【证据强度】证据强度极低：没有量化数据、没有事故/项目复盘、没有标准或政策原文，仅能作为选题线索，不能据此判断任何结论。需要核查原文是否只是链接聚合。\n【原文核验】打开全文先看每条话题是否附原始来源与日期；重点核查“电池测试遭质疑”涉及哪家测试机构/标准及具体失效模式，以及“IPP退出危机”是否有项目规模、收益率或并网数据支撑。",
+      "inspiration": "可作为行业舆情选题线索，尤其“电池测试遭质疑”和“IPP退出危机”可能指向并网合规与经济性痛点；但信息量不足以支撑研究判断，需先拿到原文链接再决定是否跟踪。"
+    },
+    {
+      "id": "7bcc212ae1d5",
+      "title_zh": "Blue Elephant Energy收购TPSolar荷兰40MW/160MWh电池储能项目95%股权",
+      "title_orig": "‘Solar and energy storage belong together’: Blue Elephant buys 160MWh Dutch BESS from TPSolar",
+      "source": "Energy-Storage.News",
+      "category": "industry",
+      "url": "https://www.energy-storage.news/blue-elephant-160mwh-dutch-bess-tpsolar/",
+      "doi": "",
+      "authors": [
+        "George Heynes"
+      ],
+      "published_at": "2026-11-27",
+      "score": 2.2,
+      "tags": [
+        "储能项目并购",
+        "荷兰BESS",
+        "电网侧储能"
+      ],
+      "tldr": {
+        "problem": "荷兰BESS项目开发需要资本接盘并持有运营",
+        "method": "Blue Elephant Energy从开发商TPSolar收购项目95%股权，规模40MW/160MWh",
+        "takeaway": "仅披露交易股权与装机规模，未给投资额、技术路线或收益模式"
+      },
+      "conditions_and_metrics": "项目地：荷兰；规模：40MW/160MWh；交易：Blue Elephant Energy收购95%股权；卖方/开发商：TPSolar；⚠️ 摘要未披露投资金额、电芯/PCS供应商、并网节点、收益合同与投运时间。",
+      "deep_dive": "【核心实现】Blue Elephant Energy通过收购TPSolar持有的荷兰40MW/160MWh BESS项目95%股权成为控股方；原文未说明项目开发阶段、是否已开工、并网安排及剩余5%股权归属。\n【证据强度】信息仅来自一句交易简讯，除容量和股权比例外，没有交易金额、项目技术方案、长期收益合同或投运时间，无法判断资产质量与工程成熟度。\n【原文核验】若下载原文，先核查交易对价与交割条件，再核查项目是否取得并网许可、是否签订容量/辅助服务合同及预计投运节点。",
+      "inspiration": "作为产业信号，它只说明荷兰BESS资产继续被资本收购，对电池预警算法无直接技术价值；若关注储能安全，需另找项目技术方案与并网运行数据。"
+    },
+    {
+      "id": "0aabe90fb448",
+      "title_zh": "太阳能将角逐中国电网第二大电源位置",
+      "title_orig": "Solar is coming for the No. 2 spot on China’s grid",
+      "source": "Canary Media",
+      "category": "industry",
+      "url": "https://www.canarymedia.com/articles/solar/solar-no-2-china-grid",
+      "doi": "",
+      "authors": [
+        "Dan McCarthy"
+      ],
+      "published_at": "2026-11-27",
+      "score": 2.2,
+      "tags": [
+        "中国电力结构",
+        "光伏渗透率",
+        "水电",
+        "储能需求"
+      ],
+      "tldr": {
+        "problem": "中国电网电源结构正在换位，储能与并网如何被反向约束尚不清楚",
+        "method": "Canary Media 每周图表栏目简讯，转述光伏将超过水电的判断，未披露测算方法",
+        "takeaway": "煤电仍占中国发电量一半以上；摘要未给任何量化指标"
+      },
+      "conditions_and_metrics": "⚠️ 摘要未披露具体数据：无光伏装机容量或发电量占比、无超越水电的时间节点、无数据来源（如 Ember、国家能源局）、无利用小时数、弃光率或储能配套规模。仅有两句定性判断。",
+      "deep_dive": "",
+      "inspiration": "只可作为“光伏高渗透推动灵活性调节需求”的背景引述，对电池预警、故障诊断方向无直接信息价值；若要做储能选题，应去找带弃光率、峰谷价差或调峰缺口数据的原始报表，而不是这条简讯。"
+    },
+    {
+      "id": "dee7c7016152",
+      "title_zh": "音频长读：世界上最珍贵的脑样本——以及它们如何教我们理解人类",
+      "title_orig": "Audio long read: The world’s most precious brain samples — and what they teach us about being human",
+      "source": "Nature News",
+      "category": "science",
+      "url": "https://www.nature.com/articles/d41586-026-03900-8",
+      "doi": "",
+      "authors": [
+        "Rachel Fieldhouse",
+        "Benjamin Thompson"
+      ],
+      "published_at": "2026-11-27",
+      "score": 1.9,
+      "tags": [
+        "活体人脑组织",
+        "神经元生理",
+        "神经科学"
+      ],
+      "tldr": {
+        "problem": "活体人脑神经元稀缺，难以在自然环境中研究其行为",
+        "method": "Nature新闻介绍利用活体人脑样本中的稀有神经元开展实验",
+        "takeaway": "摘要仅称有助于测试天然环境下脑细胞行为，未给量化指标"
+      },
+      "conditions_and_metrics": "⚠️ 摘要未披露具体实验工况或量化指标；仅提及样本来自活体人类、为稀有神经元，用于观察自然环境中的细胞行为；未说明脑区、疾病背景、样本量、培养/记录方法或对照设计。",
+      "deep_dive": "【核心实现】这篇Nature新闻稿聚焦从活体人类获取的稀有神经元，主张在更接近天然环境的条件下观察脑细胞行为，而非仅依赖动物模型或离体细胞系。摘要未给出具体取材路径、脑区来源或实验平台。\n【证据强度】目前只有一句编辑推介，属于新闻导览而非研究论文；没有样本量、对照、记录参数或任何量化结果，无法判断“自然环境”具体指急性脑片、类器官共培养还是活体移植。\n【原文核验】若下载全文，先核查样本来源与伦理/知情同意细节，以及所谓“natural environment”对应的实验装置；再找有无与动物模型或传统培养体系的直接对比数据。",
+      "inspiration": "与电池预警、储能安全和AI4S无直接迁移价值；可留作科学传播或伦理讨论素材，但不建议占用精读时间。"
+    },
+    {
+      "id": "1b28c8f98cae",
+      "title_zh": "沼泽的幽微之美：新书简评",
+      "title_orig": "The haunting loveliness of boglands: Books in brief",
+      "source": "Nature News",
+      "category": "science",
+      "url": "https://www.nature.com/articles/d41586-026-03885-4",
+      "doi": "",
+      "authors": [
+        "Andrew Robinson"
+      ],
+      "published_at": "2026-11-27",
+      "score": 1.6,
+      "tags": [
+        "图书简评",
+        "泥炭沼泽",
+        "科学文化"
+      ],
+      "tldr": {
+        "problem": "非研究论文，无待解决的科学或工程瓶颈",
+        "method": "Nature 文化栏目，Andrew Robinson 评介五本科学类图书，主题围绕沼泽/泥炭地景观",
+        "takeaway": "摘要未给任何量化指标或研究方法，仅有栏目定位与主题词"
+      },
+      "conditions_and_metrics": "⚠️ 摘要未披露具体书目、作者、出版社、任何实验条件或数据。仅知：来源为 Nature News 的“Books in brief”栏目，撰稿人 Andrew Robinson，主题为沼泽地的“haunting loveliness”，共评五本书。",
+      "deep_dive": "【核心实现】这是一篇书评栏目的内容提要：由 Andrew Robinson 挑选五本科学类新书做短评，标题把主题锁定在沼泽/泥炭地景观的审美与科学意涵上。摘要只有一行栏目说明，没有任何关于论证框架、选书标准或评述角度的信息。\n【证据强度】证据强度最低档：既没有研究方法，也没有数据，连五本书的书名和作者都未在摘要中出现。它属于科学文化读物推荐，不构成可核查的学术主张，把它当作科研情报来源没有意义。\n【原文核验】若真要点开，只需确认两件事：一是五本书里是否有涉及泥炭地碳库、湿地温室气体通量或生态修复的实证性著作（这类书可作储能/碳中和背景阅读）；二是评述是否只是审美性散文，若如此，对科研选题零参考价值。",
+      "inspiration": "对电池预警、AI4S 方法与教学改革均无实质价值，属于科普文化阅读范畴。仅在需要给学生做“科学写作/科学叙事”范例时，可当作 Nature 短书评的文体样本，其余情况可直接跳过。"
+    }
+  ]
+}

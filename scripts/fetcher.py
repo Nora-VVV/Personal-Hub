@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Set, Tuple
 import feedparser
 import httpx
 
-USER_AGENT = "PersonalHub/1.0 (+[https://github.com](https://github.com); mailto:personal-hub@example.com)"
+USER_AGENT = "PersonalHub/1.0 (+https://github.com; mailto:personal-hub@example.com)"
 SOURCES_CACHE_PATH = os.path.join("data", "openalex_sources_cache.json")
 
 
@@ -73,7 +73,7 @@ def resolve_openalex_source_ids(journals: List[str], client: httpx.Client) -> Di
 
         try:
             resp = client.get(
-                "[https://api.openalex.org/sources](https://api.openalex.org/sources)",
+                "https://api.openalex.org/sources",
                 params={"search": journal, "per-page": 5},
                 timeout=15.0,
             )
@@ -221,7 +221,7 @@ def fetch_classic_streams(
                 params["search"] = search_query
 
             try:
-                resp = client.get("[https://api.openalex.org/works](https://api.openalex.org/works)", params=params, timeout=25.0)
+                resp = client.get("https://api.openalex.org/works", params=params, timeout=25.0)
                 resp.raise_for_status()
                 works = resp.json().get("results", [])
             except Exception as e:
@@ -306,7 +306,7 @@ def fetch_openalex_streams(streams: List[dict], client: httpx.Client) -> List[di
             params["search"] = search_query
 
         try:
-            resp = client.get("[https://api.openalex.org/works](https://api.openalex.org/works)", params=params, timeout=25.0)
+            resp = client.get("https://api.openalex.org/works", params=params, timeout=25.0)
             resp.raise_for_status()
             works = resp.json().get("results", [])
         except Exception as e:
@@ -406,7 +406,7 @@ def fetch_category_backfill(
                     params["search"] = search_query
 
                 try:
-                    resp = client.get("[https://api.openalex.org/works](https://api.openalex.org/works)", params=params, timeout=25.0)
+                    resp = client.get("https://api.openalex.org/works", params=params, timeout=25.0)
                     resp.raise_for_status()
                     works = resp.json().get("results", [])
                 except Exception as e:
@@ -453,7 +453,7 @@ def fetch_hf_daily_papers(cfg: dict, client: httpx.Client) -> List[dict]:
     items = []
 
     try:
-        resp = client.get("[https://huggingface.co/api/daily_papers](https://huggingface.co/api/daily_papers)", timeout=20.0)
+        resp = client.get("https://huggingface.co/api/daily_papers", timeout=20.0)
         resp.raise_for_status()
         data = resp.json()
         data.sort(key=lambda x: (x.get("paper") or {}).get("upvotes", 0), reverse=True)
@@ -464,7 +464,7 @@ def fetch_hf_daily_papers(cfg: dict, client: httpx.Client) -> List[dict]:
             summary = (paper.get("summary") or entry.get("summary") or "").strip()
             if not title:
                 continue
-            url = f"[https://huggingface.co/papers/](https://huggingface.co/papers/){paper_id}" if paper_id else "[https://huggingface.co/papers](https://huggingface.co/papers)"
+            url = f"https://huggingface.co/papers/{paper_id}" if paper_id else "https://huggingface.co/papers"
             doi = f"10.48550/arXiv.{paper_id}" if paper_id else ""
             pub_raw = paper.get("publishedAt") or entry.get("publishedAt") or ""
             pub_date = pub_raw[:10] if len(pub_raw) >= 10 else datetime.now(timezone.utc).strftime("%Y-%m-%d")

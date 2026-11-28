@@ -24,12 +24,11 @@ classic_streams:
     year_range: "2025-2026"
     min_citations: 3
     max_items: 1
-    search_query: "battery OR supercapacitor OR capacitor OR BESS"
+    search_query: "battery OR supercapacitor OR BESS"
     must_match_a:
       - battery
       - batteries
       - supercapacitor
-      - capacitor
       - bess
       - lithium-ion
       - sodium-ion
@@ -129,13 +128,12 @@ openalex_streams:
     lookback_days: 14
     max_items: 12
     # OpenAlex 粗筛搜索词
-    search_query: "battery OR supercapacitor OR capacitor OR BESS"
+    search_query: "battery OR supercapacitor OR BESS"
     # 本地精准正则过滤：必须同时命中 主题词(must_match_a) 和 方法/预警词(must_match_b)
     must_match_a:
       - battery
       - batteries
       - supercapacitor
-      - capacitor
       - bess
       - lithium-ion
       - sodium-ion

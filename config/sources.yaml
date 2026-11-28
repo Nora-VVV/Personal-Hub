@@ -4,6 +4,8 @@
 categories:
   - id: battery
     name: 电池与储能学术
+  - id: classics
+    name: 🏛️ 经典回溯
   - id: ai
     name: AI 前沿
   - id: science
@@ -12,6 +14,111 @@ categories:
     name: 教育教学
   - id: industry
     name: 储能产业
+
+# ---------------------------------------------------------
+# 0. 每日经典回溯流（每天固定 1 篇近期遗珠 + 1 篇高引里程碑，永久去重）
+# ---------------------------------------------------------
+classic_streams:
+  - name: 近两年遗珠 (2025-2026)
+    category: classics
+    year_range: "2025-2026"
+    min_citations: 3
+    max_items: 1
+    search_query: "battery OR supercapacitor OR capacitor OR BESS"
+    must_match_a:
+      - battery
+      - batteries
+      - supercapacitor
+      - capacitor
+      - bess
+      - lithium-ion
+      - sodium-ion
+      - solid-state
+    must_match_b:
+      - prediction
+      - predict
+      - prognosis
+      - prognostic
+      - early warning
+      - thermal runaway
+      - soh
+      - rul
+      - state of health
+      - state of charge
+      - fault diagnosis
+      - degradation
+      - aging
+      - ageing
+      - safety
+    journals:
+      - Nature
+      - Science
+      - Nature Energy
+      - Nature Chemical Engineering
+      - Nature Computational Science
+      - Nature Communications
+      - Scientific Reports
+      - Science Advances
+      - Cell
+      - Joule
+      - Cell Reports Physical Science
+      - IEEE Transactions on Transportation Electrification
+      - IEEE Transactions on Industrial Electronics
+      - IEEE Transactions on Vehicular Technology
+      - IEEE Transactions on Power Electronics
+      - Applied Energy
+      - Energy
+      - Energy Storage Materials
+
+  - name: 高引里程碑 (2018-2024)
+    category: classics
+    year_range: "2018-2024"
+    min_citations: 50
+    max_items: 1
+    search_query: "battery OR supercapacitor OR capacitor OR BESS"
+    must_match_a:
+      - battery
+      - batteries
+      - supercapacitor
+      - capacitor
+      - bess
+      - lithium-ion
+      - sodium-ion
+      - solid-state
+    must_match_b:
+      - prediction
+      - predict
+      - prognosis
+      - prognostic
+      - early warning
+      - thermal runaway
+      - soh
+      - rul
+      - state of health
+      - state of charge
+      - fault diagnosis
+      - degradation
+      - aging
+      - ageing
+      - safety
+    journals:
+      - Nature
+      - Science
+      - Nature Energy
+      - Nature Chemical Engineering
+      - Nature Computational Science
+      - Nature Communications
+      - Science Advances
+      - Cell
+      - Joule
+      - Cell Reports Physical Science
+      - IEEE Transactions on Transportation Electrification
+      - IEEE Transactions on Industrial Electronics
+      - IEEE Transactions on Vehicular Technology
+      - IEEE Transactions on Power Electronics
+      - Applied Energy
+      - Energy
+      - Energy Storage Materials
 
 # ---------------------------------------------------------
 # 1. OpenAlex 学术顶刊精准监控流（免 API Key，自带摘要与 DOI）
@@ -198,8 +305,3 @@ rss_sources:
       - thermal
       - safety
       - ldes
-
-  - name: IEA News
-    url: https://www.iea.org/rss/news.xml
-    category: industry
-    max_items: 3

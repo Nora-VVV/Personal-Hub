@@ -9,6 +9,7 @@ LATEST_JSON_PATH = os.path.join("docs", "data", "latest.json")
 
 CATEGORY_NAMES = {
     "battery": "电池与储能学术",
+    "classics": "🏛️ 经典回溯",
     "ai": "AI 前沿",
     "science": "科学发现与 AI4S",
     "education": "教育教学",
